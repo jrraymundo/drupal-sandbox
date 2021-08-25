@@ -55,6 +55,9 @@ class RSVPForm extends FormBase {
     /**
      * (@inheritdoc)
      * 
+     * The method name validateForm() is expected by Drupal 
+     * when creating a form validation method
+     * 
      * A drupal class method called service() is used to handle email validation easily,
      * it returns a boolean and is then used in a condition to return error messages.
      * 
@@ -79,6 +82,18 @@ class RSVPForm extends FormBase {
      * Which means if &$form is changed, the original variable will also change
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {
-        drupal_set_message(t('The form is working.'));
+        // This gets the id of the user who is currently logged in 
+        $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+
+        db_insert('rsvplist')
+        ->fields(array(
+            'mail' => $form_state->getValue('email'),
+            'nid' => $form_state->getValue('nid'),
+            'uid' => $user->id(),
+            'created' => time()
+        ))
+        ->execute();
+
+        drupal_set_message(t('Thank you for your RSVP, you are on the list for the event'));
     }
 }
