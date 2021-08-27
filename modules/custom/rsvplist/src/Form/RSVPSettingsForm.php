@@ -6,6 +6,9 @@
 
 namespace Drupal\rsvplist\Form;
 
+/**
+ * ConfigFormBase is used for creating config forms
+ */
 use Drupal\Core\Form\ConfigFormBase;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Form\FormStateInterface;
@@ -23,6 +26,8 @@ use Drupal\Core\Form\FormStateInterface;
     
     /**
      * {@inheritdoc}
+     * In this function, we return the name of our settings file called rsvplist.settings
+     * The files in the /rsvplist/config/install folder will also be using this name
      */
     protected function getEditableConfigNames() {
         return [
