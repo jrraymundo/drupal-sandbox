@@ -1,3 +1,5 @@
+# Note that this RSVPForm route is only required for accessing the form in a specific page
+# The RSVPForm block that was created is not dependent to this route  
 rsvplist.form:
   path: '/rsvplist'
   defaults:
@@ -13,3 +15,11 @@ rsvplist.admin_settings:
     _title: 'RSVP List Settings'
   requirements:
     _permission: 'administer rsvplist'
+
+rsvplist.report:
+  path: '/admin/reports/rsvplist'
+  defaults:
+    _controller: '\Drupal\rsvplist\Controller\ReportController::report'
+    _title: 'List of RSVPs'
+  requirements:
+    _permission: 'view rsvplist'
