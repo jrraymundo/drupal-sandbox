@@ -72,6 +72,19 @@ class RSVPForm extends FormBase {
                 t('The email address %mail is not valid.'),
                 array('%mail' => $value)
             );
+            return;
+        }
+
+        // Check if the email submitted has already rsvp-ed for this node/content
+        $node = \Drupal::routeMatch()->getParameter('node');
+        $select->fields('r', array('nid'));
+        $select->condition('nid', $node->id());
+        $select->condition('mail', $value);
+        $results = $select->execute();
+        
+        // If existing email is found with the current nid, throw error
+        if (!empty($results->fetchCol())) {
+            $form_state->setErrorByName('email', t('The address %mail is already subscribed to this list.', array('%mail' => $value)));
         }
     }
 

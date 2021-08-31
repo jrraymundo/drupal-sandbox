@@ -48,11 +48,24 @@ use Drupal\Core\Access\AccessResult;
         $node = \Drupal::routeMatch()->getParameter('node');
         $nid = $node->nid->value;
 
+        /**
+         * @var \Drupal\rsvplist\EnablerService $enabler 
+         * 
+         * This will pull the rsvplist.enabler created from EnablerService.php
+        */
+        $enabler = \Drupal::service('rsvplist.enabler');
+
         /** 
-         * If the $nid exists and is valid then we allow access, else do not show the block
+         * If the $nid is valid/exists and the block is enabled via rsvplist.enabler,
+         * then we allow access, else do not show the block
+         * 
          * 'view rsvplist' refers to what was created in the permissions file
          */
-        if (is_numeric($nid)) return AccessResult::allowedIfHasPermission($account, 'view rsvplist');
+        if (is_numeric($nid)) { // If $nid is valid
+            if ($enabler->isEnabled($node)) { // If block is enabled for this $node
+                return AccessResult::allowedIfHasPermission($account, 'view rsvplist');
+            }
+        }
         return AccessResult::forbidden();
     }
  }
